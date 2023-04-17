@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {ToastContainer, toast} from "react-toastify";
 import "./app.css";
 import Task from "./Task";
 import TaskForm from "./TaskForm";
@@ -6,7 +7,7 @@ import TaskHookForm from "./TaskHookForm";
 import PeopleForm from "./PeopleForm";
 import { initialTasks, initialTeam } from "./data";
 
-
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
   const [team, setTeam] = useState(initialTeam);
@@ -20,8 +21,31 @@ function App() {
   }
 
   function handleComplete(id) {
-    console.log("tamamlama fonksiyonunu buraya yazın")
+    console.log(tasks);
+    const selectedTask=tasks.filter(e=>{
+      return e.id ===id;
+    })
+    selectedTask[0].status = "yapıldı"
+    setTasks([...tasks, selectedTask]);
+    setTimeout(()=>{
+      toast.success('Görev tamamlandı', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    },100)
   }
+  useEffect(()=>{    
+    toast('Görev ekleyebilirsiniz', {   
+      autoClose: 2000,
+      theme: "dark",
+   });
+  },[])
 
   return (
     <div className="app">
@@ -59,7 +83,7 @@ function App() {
           </div>
         </div>
       </div>
-
+<ToastContainer/>
     </div>
   );
 }
